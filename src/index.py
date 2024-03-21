@@ -9,10 +9,11 @@ class User:
         self.phone_number = phone_number
         self.address = address
 
-class TheaterViewing:
-    def __init__(self, name, performance):
+class Performance:
+    def __init__(self, name, performance, area):
         self.name = name
         self.performance = performance
+        self.area = area
 
 # Clear terminal
 def clear():
@@ -63,62 +64,111 @@ def login():
 def buy_ticket():
     print("Ticket TODO")
 
-def theater_show(current_user):
-    print("\nHei, "+current_user.name +"\nVelg forestilling!\n----------------------------")
-    print('1. Kongsemnene \n2. Størst av alt er kjærligheten\n3. Avslutt\n')
-
-    viewing = int(input("Skriv inn tall: "))
-
-    if viewing == 1:
-        while True:
+def choose_ticket_area():
+    while True:
             try:
                 clear()
-                print("Visninger av Kongsemnene:\n")
-                print("1. 1.feb")
-                print("2. 2.feb")
-                print("3. 3.feb")
-                print("5. 5.feb")
-                print("6. 6.feb \n")
-                print("7. Avslutt")
+                print("Velg Sitteområde:\n")
+                print("1. Parkett")
+                print("2. Balkong")
+                print("3. Galleri \n")
+                print("4. Avslutt")
 
-                theater_viewing = int(input("Skriv inn tall: "))
+                area = int(input("Skriv inn tall: "))
 
-                if theater_viewing > 0 and theater_viewing < 7:
-                    return theater_viewing
-                elif theater_viewing == 7:
+                if area > 0 and area < 4:
+                    return area
+                elif area == 4:
                     exit()
                     break
                 else:
                     clear()
-                    print("\n \n** " + str(theater_viewing) + " er en ukjent kommando **\n")
+                    print("\n \n** " + str(area) + " er en ukjent kommando **\n")
             
             except ValueError:
                 print("\nFeil input, bruk tall!\n")
-    elif viewing == 2:
-            while True:
-                try:
-                    clear()
-                    print("Visninger av Størst av alt er kjærligheten:\n")
-                    print("1. 3.feb")
-                    print("2. 6.feb")
-                    print("3. 7.feb")
-                    print("5. 12.feb")
-                    print("6. 13.feb")
-                    print("7. 14.feb\n")
-                    print("8. Avslutt")
 
-                    theater_viewing = int(input("Skriv inn tall: "))
+def choose_seat(seating_area):
+    capacity = 0
 
-                    if theater_viewing > 0 and theater_viewing < 8:
-                        return theater_viewing
-                    elif theater_viewing == 8:
-                        exit()
-                    else:
+    if seating_area == 0:
+        # Kongsemnene Hovedscene todo: missing seat numbers
+        print("TODO")
+    elif seating_area == 1:
+        print("TODO")
+    elif seating_area == 2:
+        print("TODO")
+    elif seating_area == 3:
+        print("TODO")
+
+def select_performance(current_user):
+    while True:
+        try:
+            print("\nHei, "+current_user.name +"\nVelg forestilling!\n----------------------------")
+            print('1. Kongsemnene \n2. Størst av alt er kjærligheten\n3. Avslutt\n')
+
+            viewing = int(input("Skriv inn tall: "))
+
+            if viewing == 1:
+                while True:
+                    try:
                         clear()
-                        print("\n \n** " + str(theater_viewing) + " er en ukjent kommando **\n")
-                
-                except ValueError:
-                    print("\nFeil input, bruk tall!\n")
+                        print("Visninger av Kongsemnene:\n")
+                        print("1. 1.feb")
+                        print("2. 2.feb")
+                        print("3. 3.feb")
+                        print("5. 5.feb")
+                        print("6. 6.feb \n")
+                        print("7. Avslutt")
+
+                        theater_viewing = int(input("Skriv inn tall: "))
+
+                        if theater_viewing > 0 and theater_viewing < 7:
+                            chosen_performance = Performance("Kongsemnene", theater_viewing, 0)
+                            return chosen_performance
+                        elif theater_viewing == 7:
+                            exit()
+                            break
+                        else:
+                            clear()
+                            print("\n \n** " + str(theater_viewing) + " er en ukjent kommando **\n")
+                    
+                    except ValueError:
+                        print("\nFeil input, bruk tall!\n")
+            elif viewing == 2:
+                    while True:
+                        try:
+                            clear()
+                            print("Visninger av Størst av alt er kjærligheten:\n")
+                            print("1. 3.feb")
+                            print("2. 6.feb")
+                            print("3. 7.feb")
+                            print("5. 12.feb")
+                            print("6. 13.feb")
+                            print("7. 14.feb\n")
+                            print("8. Avslutt")
+
+                            theater_viewing = int(input("Skriv inn tall: "))
+
+                            if theater_viewing > 0 and theater_viewing < 8:
+                                area = choose_ticket_area()
+                                chosen_performance = Performance("Kongsemnene", theater_viewing, area)
+                                return chosen_performance
+                            elif theater_viewing == 8:
+                                exit()
+                                break
+                            else:
+                                clear()
+                                print("\n \n** " + str(theater_viewing) + " er en ukjent kommando **\n")
+                        
+                        except ValueError:
+                            print("\nFeil input, bruk tall!\n")
+            else:
+                clear()
+                print("\n \n** " + str(area) + " er en ukjent kommando **\n")
+
+        except ValueError:
+            print("\nFeil input, bruk tall!\n")
 
 def main():
     print("\nVelkommen til teaterbestilling!\n----------------------------")
@@ -127,7 +177,7 @@ def main():
     if login_choice == 1:
         clear()
         current_user = auth_login()
-        theater_show(current_user)
+        current_performance = select_performance(current_user)
 
     elif login_choice == 2:
         clear()
