@@ -25,19 +25,44 @@ def exit():
     print("\n Avslutter program...")
     
 def auth_login():
-    print("LOGIN TODO")
-    # Check DB for user
-    # Return user
-    current_user = User("Vetle", "+471234", "Sandkollveien 22")
+    con = sqlite3.connect('teater.db')
+    cur = con.cursor()
+
+    clear()
+    print("Skriv inn Telefonnummer\n")
+    phone_number = input("Her: ")
+
+    cur.execute("SELECT * FROM Customer WHERE MobileNumber = ?", phone_number)
+
+    db_info = cur.fetchone()
+    con.close()
+
+    current_user = User(db_info[1], db_info[2], db_info[3])
     return current_user
 
 def auth_register():
-    print("REGISTER TODO")
-    # Check DB for user
-    # If user does not exist register, cont.
-    # If not retry
-    # return user
+    con = sqlite3.connect('teater.db')
+    cur = con.cursor()
 
+    clear()
+    print("Skriv inn Navn\n")
+    name = input("Her: ")
+
+    clear()
+    print("Skriv inn Tlf. Nummer\n")
+    phone_number = input("Her: ")
+
+    clear()
+    print("Skriv inn Adresse\n")
+    addreess = input("Her: ")
+
+    data = (name, phone_number, addreess)
+
+    cur.execute('''INSERT INTO Customer (CustomerName, MobileNumber, CustomerAddress) 
+                VALUES (?, ?, ?)''', data)
+    
+    con.commit()
+    con.close()
 
 
 def login():
@@ -92,8 +117,8 @@ def choose_seat(seating_area):
     capacity = 0
 
     if seating_area == 0:
-        # Kongsemnene Hovedscene todo: missing seat numbers
         print("TODO")
+
     elif seating_area == 1:
         print("TODO")
     elif seating_area == 2:
@@ -170,7 +195,23 @@ def select_performance(current_user):
         except ValueError:
             print("\nFeil input, bruk tall!\n")
 
+def order_tickets():
+    clear()
+    print("Hvilken type billett ønsker du?\n")
+    print("1. 3.feb")
+    print("2. 6.feb")
+    print("3. 7.feb")
+    print("5. 12.feb")
+    print("6. 13.feb")
+    print("7. 14.feb\n")
+    print("8. Avslutt")
+
+
 def main():
+    # DB Connection
+    con = sqlite3.connect('teater.db')
+    cur = con.cursor()
+
     print("\nVelkommen til teaterbestilling!\n----------------------------")
     login_choice = login()
     
@@ -180,6 +221,7 @@ def main():
         current_performance = select_performance(current_user)
 
     elif login_choice == 2:
+        auth_register()
         clear()
         main()
 
